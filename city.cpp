@@ -6,23 +6,11 @@
 
 using namespace std;
 
-constexpr int min_range {0};
-constexpr int max_range {1000};
+city::city() {}
 
-city::city()
-{
-    set_x(min_range);
-    set_y(min_range);
-}
+city::city(string name, double x, double y) : name{name}, x{x}, y{y} {}
 
-city::city(std::string name, int x, int y) : name{name}
-{
-    set_x(x);
-    set_y(y);
-}
-
-city::city(const city &c) : name{c.name}, x{c.x}, y{c.y}
-{}
+city::city(const city &c) : name{c.name}, x{c.x}, y{c.y} {}
 
 city::~city() {}
 
@@ -31,44 +19,36 @@ string city::get_name()
     return name;
 }
 
-int city::get_x()
+double city::get_x()
 {
     return x;
 }
 
-int city::get_y()
+double city::get_y()
 {
     return y;
 }
 
-void city::set_name(string name)
-{
-    this->name = name;
-}
-
-void city::set_x(int x)
-{
-    if(x < min_range)
-        throw "x value is too small";
-    if(x > max_range)
-        throw "x value is too high";
-    this->x = x;
-}
-
-void city::set_y(int y)
-{
-    if(y < min_range)
-        throw "x value is too small";
-    if(y > max_range)
-        throw "x value is too high";
-    this->y = y;
-}
+//void city::set_name(string name)
+//{
+//    this->name = name;
+//}
+//
+//void city::set_x(double x)
+//{
+//    this->x = x;
+//}
+//
+//void city::set_y(double y)
+//{
+//    this->y = y;
+//}
 
 city& city::operator=(const city &c)
 {
     name = c.name;
-    set_x(c.x);
-    set_y(c.y);
+    x = c.x;
+    y = c.y;
 
 }
 
@@ -84,6 +64,21 @@ bool city::operator==(const city &c)
             }
         }
     }
+    return false;
+}
+
+bool city::operator< (const city & c) const
+{
+    if(name < c.name)
+        return true;
+//    if(c.name < name)
+//        return  false;
+//    if(x < c.x)
+//        return true;
+//    if(c.x < x)
+//        return false;
+//    if(y < c.y)
+//        return true;
     return false;
 }
 

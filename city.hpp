@@ -9,20 +9,21 @@ class city
 {
 private:
     std::string name;
-    int x;
-    int y;
+    double x;
+    double y;
 public:
     city();
-    city(std::string name, int x, int y);
+    city(std::string name, double x, double y);
     city(const city &c);
     virtual ~city();
     std::string get_name();
-    int get_x();
-    int get_y();
-    void set_name(std::string name);
-    void set_x(int x);
-    void set_y(int y);
+    double get_x();
+    double get_y();
+//    void set_name(std::string name);
+//    void set_x(double x);
+//    void set_y(double y);
     city & operator= (const city & c);
+    bool operator< (const city & c) const;
     bool operator == (const city & c);
     friend std::ostream& operator<<(std::ostream& out, const struct city & c);
 };
