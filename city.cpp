@@ -34,7 +34,6 @@ city& city::operator=(const city &c)
     name = c.name;
     x = c.x;
     y = c.y;
-
 }
 
 bool city::operator==(const city &c)

@@ -24,4 +24,6 @@ public:
     double get_distance_between_cities(city first, city second) const;
     double get_tour_distance() const;
     double determine_fitness();
+
+    bool operator ==(const tour & t);
 };

@@ -54,3 +54,11 @@ double tour::determine_fitness()
 {
     return (1/get_tour_distance()) * FITNESS_SCALAR;
 }
+
+bool tour::operator==(const tour & t)
+{
+    if(equal(cities.begin(), cities.end(), t.cities.begin()))
+        return true;
+
+    return false;
+}

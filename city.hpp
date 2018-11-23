@@ -23,5 +23,5 @@ public:
 
     city & operator= (const city & c);
     bool operator == (const city & c);
-    friend std::ostream& operator<<(std::ostream& out, const struct city & c);
+    friend std::ostream& operator<<(std::ostream& out, const city & c);
 };
