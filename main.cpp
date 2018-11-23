@@ -12,16 +12,25 @@ constexpr double LOWER {0.0};
 constexpr double UPPER {1000.0};
 constexpr int CITIES_IN_TOUR {32};
 constexpr int POPULATION_SIZE (32);
-constexpr int ITERATIONS {1000};
+constexpr int NUMBER_OF_ELITES {1};
+constexpr int PARENT_POOL_SIZE {5};
+constexpr int NUMBER_OF_PARENTS {3};
 
-int main() {
+struct sort_by_fitness
+{
+    bool operator() (const tour & a, const tour & b)
+    {
+        return a.get_fitness() > b.get_fitness();
+    }
+};
 
-    cout << setprecision(2) << fixed;
+vector<city> cities_to_visit;
+list<tour> population;
 
+void init()
+{
     default_random_engine generator(time(0));
     uniform_real_distribution<double> distribution(LOWER, UPPER);
-
-    vector<city> cities_to_visit;
 
     int city_counter {0};
 
@@ -33,7 +42,6 @@ int main() {
         city_counter++;
     }
 
-    list<tour> population;
     {
         for(int i = 0; i < POPULATION_SIZE; ++i)
         {
@@ -42,20 +50,45 @@ int main() {
         }
     }
 
-    population.sort(tour::sort_by_fitness());
+    population.sort(sort_by_fitness());
 
-    int tour_count {0};
+    int tour_counter {0};
 
     for(list<tour>::iterator it = population.begin(); it != population.end(); ++it)
     {
         for(auto c : it->get_cities())
         {
-            cout << "TOUR " << tour_count << ": " << c << "\n";
+            cout << "TOUR " << tour_counter << ": " << c << "\n";
         }
         cout << "DISTANCE = " << it->get_tour_distance() << "\n";
         cout << "FITNESS = " << it->get_fitness() << "\n" << "\n";
-        tour_count++;
+        tour_counter++;
     }
+
+    double base_distance = population.begin()->get_tour_distance();
+
+    cout << "BASE DISTANCE = " << base_distance << "\n";
+}
+
+void evaluate()
+{
+    tour parent_pool[NUMBER_OF_PARENTS];
+
+    list<tour>::iterator it = population.begin();
+    advance(it, NUMBER_OF_ELITES);
+
+    for(int i = 0; i < NUMBER_OF_PARENTS; ++i)
+    {
+        parent_pool[i] = *it;
+        ++it;
+    }
+}
+
+int main() {
+    cout << setprecision(2) << fixed;
+
+    init();
+    
 
     return 0;
 }

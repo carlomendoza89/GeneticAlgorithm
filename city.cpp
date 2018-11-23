@@ -29,21 +29,6 @@ double city::get_y()
     return y;
 }
 
-//void city::set_name(string name)
-//{
-//    this->name = name;
-//}
-//
-//void city::set_x(double x)
-//{
-//    this->x = x;
-//}
-//
-//void city::set_y(double y)
-//{
-//    this->y = y;
-//}
-
 city& city::operator=(const city &c)
 {
     name = c.name;
@@ -64,21 +49,6 @@ bool city::operator==(const city &c)
             }
         }
     }
-    return false;
-}
-
-bool city::operator< (const city & c) const
-{
-    if(name < c.name)
-        return true;
-//    if(c.name < name)
-//        return  false;
-//    if(x < c.x)
-//        return true;
-//    if(c.x < x)
-//        return false;
-//    if(y < c.y)
-//        return true;
     return false;
 }
 
