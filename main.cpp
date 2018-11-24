@@ -15,8 +15,8 @@ constexpr int CITIES_IN_TOUR {32};
 constexpr int POPULATION_SIZE (32);
 constexpr int NUMBER_OF_ELITES {1};
 constexpr int PARENT_POOL_SIZE {5};
-constexpr int NUMBER_OF_PARENTS {3};
-constexpr int ITERATIONS {100};
+constexpr int NUMBER_OF_PARENTS {2};
+constexpr int ITERATIONS {1000};
 constexpr double MUTATION_RATE {0.05};
 
 vector<city> cities_to_visit;
@@ -157,6 +157,8 @@ tour crossover()
 //
 //    tracker++;
 
+    child->mutate(MUTATION_RATE);
+
     return *child;
 }
 
@@ -170,8 +172,6 @@ void repopulate()
         new_population.push_back(crossover());
 
     population = new_population;
-
-    
 
     sort(population.begin(), population.end(), [](tour a, tour b) {return a.get_fitness() > b.get_fitness();});
 }
