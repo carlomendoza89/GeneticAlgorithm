@@ -9,7 +9,6 @@
 
 using namespace std;
 
-
 constexpr double LOWER {0.0};
 constexpr double UPPER {1000.0};
 

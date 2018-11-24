@@ -6,18 +6,13 @@
 
 using namespace std;
 
-city::city() {}
+city::city() = default;
 
 city::city(string name, double x, double y) : name{name}, x{x}, y{y} {}
 
 city::city(const city &c) : name{c.name}, x{c.x}, y{c.y} {}
 
-city::~city() {}
-
-string city::get_name()
-{
-    return name;
-}
+city::~city() = default;
 
 double city::get_x()
 {
@@ -27,13 +22,6 @@ double city::get_x()
 double city::get_y()
 {
     return y;
-}
-
-city& city::operator=(const city &c)
-{
-    name = c.name;
-    x = c.x;
-    y = c.y;
 }
 
 bool city::operator==(const city &c)

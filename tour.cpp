@@ -5,21 +5,21 @@
 #include "tour.hpp"
 #include <algorithm>
 #include <random>
-#include <math.h>
+#include <cmath>
 
 using namespace std;
 
 constexpr double FITNESS_SCALAR {1000000};
 constexpr int SHUFFLES {64};
 
-tour::tour() {}
+tour::tour() = default;
 tour::tour(vector<city> cities) : cities{cities}
 {
     shuffle_cities();
     fitness = determine_fitness();
 }
-tour::tour(const tour &c) : cities{c.cities}, fitness(c.fitness) {}
-tour::~tour() {}
+tour::tour(const tour &c) = default;
+tour::~tour() = default;
 
 vector<city> tour::get_cities()
 {
@@ -104,8 +104,5 @@ void tour::mutate(double mutation_rate)
 
 bool tour::operator==(const tour & t)
 {
-    if(equal(cities.begin(), cities.end(), t.cities.begin()))
-        return true;
-
-    return false;
+    return equal(cities.begin(), cities.end(), t.cities.begin());
 }
