@@ -17,12 +17,16 @@ constexpr int NUMBER_OF_ELITES {1};
 constexpr int PARENT_POOL_SIZE {5};
 constexpr int NUMBER_OF_PARENTS {3};
 constexpr int ITERATIONS {100};
+constexpr double MUTATION_RATE {0.05};
 
 vector<city> cities_to_visit;
 vector<tour> population;
 vector<tour> parents;
 
 double base_fitness {0.0};
+
+random_device rd;
+mt19937 eng(rd());
 
 void init()
 {
@@ -71,8 +75,6 @@ void select_parents()
     vector<tour> parent_pool;
     while(temp.size() != NUMBER_OF_PARENTS)
     {
-        random_device rd;
-        mt19937 eng(rd());
         uniform_int_distribution<> distr(NUMBER_OF_ELITES, POPULATION_SIZE-1);
 
         int parent_number = distr(eng);
@@ -117,8 +119,6 @@ tour crossover()
 
     for(int i = 0; i < number_of_indices; ++i)
     {
-        random_device rd;
-        mt19937 eng(rd());
         uniform_int_distribution<> distr(0, CITIES_IN_TOUR);
 
         int index = distr(eng);
@@ -170,6 +170,8 @@ void repopulate()
         new_population.push_back(crossover());
 
     population = new_population;
+
+    
 
     sort(population.begin(), population.end(), [](tour a, tour b) {return a.get_fitness() > b.get_fitness();});
 }

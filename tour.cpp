@@ -55,6 +55,57 @@ double tour::determine_fitness()
     return (1/get_tour_distance()) * FITNESS_SCALAR;
 }
 
+void tour::mutate(double mutation_rate)
+{
+    default_random_engine generator(time(0));
+    uniform_real_distribution<double> distribution(0, 1);
+
+    vector<double> mutation_values;
+
+    for(auto city : cities)
+    {
+        double value = distribution(generator);
+        mutation_values.push_back(value);
+    }
+
+    for(size_t i = 0; i < mutation_values.size(); ++i)
+    {
+        if(mutation_values[i] < mutation_rate)
+        {
+            cout << "MUTATING " << cities[i];
+            if(cities[i] == cities.front())
+            {
+                cout << " DOWN" << "\n";
+                swap(cities[i], cities[i+1]);
+            } else if(cities[i] == cities.back())
+            {
+                cout << " UP" << "\n";
+                swap((cities[i]), cities[i-1]);
+            } else
+            {
+                random_device rd;
+                mt19937 eng(rd());
+                uniform_int_distribution<> distr(0, 1);
+
+                int up_or_down = distr(eng);
+
+                if(up_or_down == 1)
+                {
+                    cout << " DOWN" << "\n";
+                    swap(cities[i], cities[i+1]);
+                }
+                else
+                {
+                    cout << " UP" << "\n";
+                    swap((cities[i]), cities[i-1]);
+                }
+            }
+        }
+    }
+    fitness = determine_fitness();
+    cout << "NEW FITNESS = " << get_fitness() << "\n";
+}
+
 bool tour::operator==(const tour & t)
 {
     if(equal(cities.begin(), cities.end(), t.cities.begin()))
