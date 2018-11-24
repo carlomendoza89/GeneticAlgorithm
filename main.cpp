@@ -15,13 +15,14 @@ constexpr int CITIES_IN_TOUR {32};
 constexpr int POPULATION_SIZE (32);
 constexpr int NUMBER_OF_ELITES {1};
 constexpr int PARENT_POOL_SIZE {5};
-constexpr int NUMBER_OF_PARENTS {2};
-constexpr int TARGET_FITNESS {80};
-constexpr int ITERATIONS {10};
+constexpr int NUMBER_OF_PARENTS {3};
+constexpr int ITERATIONS {100};
 
 vector<city> cities_to_visit;
 vector<tour> population;
 vector<tour> parents;
+
+double base_fitness {0.0};
 
 void init()
 {
@@ -48,27 +49,23 @@ void init()
 
     sort(population.begin(), population.end(), [](tour a, tour b) {return a.get_fitness() > b.get_fitness();});
 
+    base_fitness = population.front().get_fitness();
+
     int tour_counter {0};
 
     for(vector<tour>::iterator it = population.begin(); it != population.end(); ++it)
     {
         for(auto c : it->get_cities())
         {
-            cout << "TOUR " << tour_counter << ": " << c << "\n";
+            cout << "STARTING TOUR " << tour_counter << ": " << c << "\n";
         }
         cout << "DISTANCE = " << it->get_tour_distance() << "\n";
         cout << "FITNESS = " << it->get_fitness() << "\n" << "\n";
         tour_counter++;
     }
-
-    double base_distance = population.begin()->get_tour_distance();
-
-    cout << "BASE DISTANCE = " << base_distance << "\n";
 }
 
-
-
-void set_parents()
+void select_parents()
 {
     vector<tour> temp;
     vector<tour> parent_pool;
@@ -85,11 +82,11 @@ void set_parents()
             parent_pool.push_back(population[parent_number]);
         }
 
-        for(int i = 0; i < PARENT_POOL_SIZE; ++i)
-        {
-            for(auto c : parent_pool[i].get_cities())
-                cout << "PARENT POOL" << i << ": " << c << "\n";
-        }
+//        for(int i = 0; i < PARENT_POOL_SIZE; ++i)
+//        {
+//            for(auto c : parent_pool[i].get_cities())
+//                cout << "PARENT POOL" << i << ": " << c << "\n";
+//        }
 
         sort(parent_pool.begin(), parent_pool.end(), [](tour a, tour b) {return a.get_fitness() > b.get_fitness();});
 
@@ -100,14 +97,19 @@ void set_parents()
 
     parents = temp;
 
-    for(int i = 0; i < NUMBER_OF_PARENTS; ++i)
-    {
-        for(auto c : parents[i].get_cities())
-            cout << "PARENT" << i << ": " << c << "\n";
-    }
+//    for(int i = 0; i < NUMBER_OF_PARENTS; ++i)
+//    {
+//        for(auto c : parents[i].get_cities())
+//            cout << "PARENT" << i << ": " << c << "\n";
+//    }
 }
 
-tour breed()
+bool contains_city(vector<city> cities, city city)
+{
+    return find(cities.begin(), cities.end(), city) != cities.end();
+}
+
+tour crossover()
 {
     vector<city> child_cities;
     int number_of_indices = NUMBER_OF_PARENTS - 1;
@@ -124,35 +126,36 @@ tour breed()
         selection_indices.push_back(index);
     }
 
-    for(int i = 0; i < number_of_indices; ++i)
+    int counter {0};
+
+    vector<tour>::iterator it;
+
+    for(it = parents.begin(); it != parents.end() - 1; ++it)
     {
-        for (int j = 0; j < selection_indices[i]; ++j)
-            child_cities.push_back(parents[i].get_cities()[j]);
+        for (int i = 0; i < selection_indices[counter]; ++i)
+            if(!contains_city(child_cities, it->get_cities()[i]))
+                child_cities.push_back(it->get_cities()[i]);
 
-        if(i == number_of_indices - 1)
+        counter++;
+    }
+
+    while (child_cities.size() < CITIES_IN_TOUR)
+    {
+        for(auto city : it->get_cities())
         {
-            int index = selection_indices[i];
-
-            while (child_cities.size() < CITIES_IN_TOUR)
-            {
-                if (!(find(child_cities.begin(), child_cities.end(), parents[i + 1].get_cities()[index]) !=
-                      child_cities.end()))
-                    child_cities.push_back(parents[i + 1].get_cities()[index]);
-                index++;
-                if (index == CITIES_IN_TOUR)
-                    index = 0;
-            }
+            if(!(contains_city(child_cities, city)))
+                child_cities.push_back(city);
         }
     }
 
+//    static int tracker = 0;
+
     tour *child = new tour(child_cities);
 
-    static int tracker {0};
-
-    for(auto c : child->get_cities())
-        cout << "NEW CHILD" << tracker << ": " << c << "\n";
-
-    tracker++;
+//    for(auto c : child->get_cities())
+//        cout << "NEW CHILD" << tracker << ": " << c << "\n";
+//
+//    tracker++;
 
     return *child;
 }
@@ -164,7 +167,7 @@ void repopulate()
         new_population.push_back(population[i]);
 
     for(int i = NUMBER_OF_ELITES; i < POPULATION_SIZE; ++i)
-        new_population.push_back(breed());
+        new_population.push_back(crossover());
 
     population = new_population;
 
@@ -176,13 +179,11 @@ int main() {
 
     init();
 
-    double base_fitness = population.front().get_fitness();
-
     int counter = 0;
 
     for(int i = 0; i < ITERATIONS; i++)
     {
-        set_parents();
+        select_parents();
         repopulate();
         counter++;
     }
@@ -191,7 +192,7 @@ int main() {
     {
         for(auto c : population[i].get_cities())
         {
-            cout << "NEW TOUR " << i << ": " << c << "\n";
+            cout << "FINAL TOUR " << i << ": " << c << "\n";
         }
         cout << "DISTANCE = " << population[i].get_tour_distance() << "\n";
         cout << "FITNESS = " << population[i].get_fitness() << "\n" << "\n";

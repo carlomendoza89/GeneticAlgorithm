@@ -44,7 +44,7 @@ double tour::get_tour_distance() const
 {
     double distance {0};
 
-    for(int i = 0; i < cities.size() - 1; ++i)
+    for(size_t i = 0; i < cities.size() - 1; ++i)
         distance += get_distance_between_cities(cities[i], cities[i+1]);
 
     return distance;
