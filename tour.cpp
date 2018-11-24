@@ -74,14 +74,11 @@ void tour::mutate(double mutation_rate)
     {
         if(mutation_values[i] < mutation_rate)
         {
-//            cout << "MUTATING " << cities[i];
             if(cities[i] == cities.front())
             {
-//                cout << " DOWN" << "\n";
                 swap(cities[i], cities[i+1]);
             } else if(cities[i] == cities.back())
             {
-//                cout << " UP" << "\n";
                 swap((cities[i]), cities[i-1]);
             } else
             {
@@ -93,19 +90,16 @@ void tour::mutate(double mutation_rate)
 
                 if(up_or_down == 1)
                 {
-//                    cout << " DOWN" << "\n";
                     swap(cities[i], cities[i+1]);
                 }
                 else
                 {
-//                    cout << " UP" << "\n";
                     swap((cities[i]), cities[i-1]);
                 }
             }
         }
     }
     fitness = determine_fitness();
-//    cout << "NEW FITNESS = " << get_fitness() << "\n";
 }
 
 bool tour::operator==(const tour & t)
