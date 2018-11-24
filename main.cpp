@@ -92,7 +92,7 @@ bool contains_city(vector<city> cities, city city)
     return find(cities.begin(), cities.end(), city) != cities.end();
 }
 
-tour crossover(int NUMBER_OF_PARENTS, int CITIES_IN_TOUR, int MUTATION_RATE)
+tour crossover(int NUMBER_OF_PARENTS, int CITIES_IN_TOUR, double MUTATION_RATE)
 {
     vector<city> child_cities;
     int number_of_indices = NUMBER_OF_PARENTS - 1;
@@ -153,6 +153,7 @@ void repopulate(int NUMBER_OF_ELITES, int POPULATION_SIZE, int NUMBER_OF_PARENTS
 int main() {
     cout << setprecision(2) << fixed;
 
+////    default values for no user input version
 //    int CITIES_IN_TOUR {32};
 //    int POPULATION_SIZE (32);
 //    int NUMBER_OF_ELITES {1};
