@@ -10,6 +10,7 @@
 using namespace std;
 
 constexpr double FITNESS_SCALAR {1000000};
+constexpr int SHUFFLES {64};
 
 tour::tour() {}
 tour::tour(vector<city> cities) : cities{cities}
@@ -32,7 +33,8 @@ double tour::get_fitness() const
 
 void tour::shuffle_cities()
 {
-    random_shuffle(this->cities.begin(), this->cities.end());
+    for(int i = 0; i < SHUFFLES; i++)
+        random_shuffle(this->cities.begin(), this->cities.end());
 }
 
 double tour::get_distance_between_cities(city first, city second) const
