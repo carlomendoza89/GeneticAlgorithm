@@ -64,7 +64,7 @@ void tour::mutate(double mutation_rate)
 
     vector<double> mutation_values;
 
-    for(auto city : cities)
+    for(size_t i {0}; i < cities.size(); ++i)
     {
         double value = distribution(generator);
         mutation_values.push_back(value);

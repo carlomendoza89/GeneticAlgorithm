@@ -79,7 +79,6 @@ void population::select_parents()
 
         sort(parent_pool.begin(), parent_pool.end(), [](tour a, tour b) {return a.get_fitness() > b.get_fitness();});
 
-
         if(!(find(parents.begin(), parents.end(), parent_pool.front()) != parents.end()))
             temp.push_back(parent_pool.front());
     }
