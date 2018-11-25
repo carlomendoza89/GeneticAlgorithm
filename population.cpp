@@ -21,6 +21,8 @@ population::~population() {}
 
 void population::init(ostream &os)
 {
+    os << "\n" << "INITIALIZING GENETIC ALGORITHM..." << "\n\n";
+
     default_random_engine generator(time(0));
     uniform_real_distribution<double> distribution(LOWER, UPPER);
 
@@ -48,14 +50,14 @@ void population::init(ostream &os)
 
     int tour_counter {0};
 
-    for(vector<tour>::iterator it = tours.begin(); it != tours.end(); ++it)
+    for(auto tour : tours)
     {
-        for(auto c : it->get_cities())
+        for(auto const &c : tour.get_cities())
         {
             os << "STARTING TOUR " << tour_counter << ": " << c << "\n";
         }
-        os << "DISTANCE = " << it->get_tour_distance() << "\n";
-        os << "FITNESS = " << it->get_fitness() << "\n" << "\n";
+        os << "DISTANCE = " << tour.get_tour_distance() << "\n";
+        os << "FITNESS = " << tour.get_fitness() << "\n" << "\n";
         tour_counter++;
     }
 }
@@ -120,7 +122,7 @@ tour population::crossover()
 
     while (child_cities.size() < (unsigned)cities_in_tour)
     {
-        for(auto city : it->get_cities())
+        for(auto const &city : it->get_cities())
         {
             if(!(contains_city(child_cities, city)))
                 child_cities.push_back(city);
@@ -150,17 +152,22 @@ void population::repopulate()
 
 void population::run(ostream &os)
 {
-    int counter;
+    os << "RUNNING GENETIC ALGORITHM..." << "\n";
 
-    for(counter = 0; counter < iterations; ++counter)
+    for(int counter = 0; counter < iterations; ++counter)
     {
         select_parents();
         repopulate();
     }
 
+    os << "GENETIC ALGORITHM COMPLETE!" << "\n\n";
+}
+
+void population::report(ostream &os)
+{
     for(int i {0}; i < population_size; ++i)
     {
-        for(auto c : tours[i].get_cities())
+        for(auto const &c : tours[i].get_cities())
         {
             os << "FINAL TOUR " << i << ": " << c << "\n";
         }
@@ -168,10 +175,10 @@ void population::run(ostream &os)
         os << "FITNESS = " << tours[i].get_fitness() << "\n" << "\n";
     }
 
-    cout << "REPORT:" << "\n";
+    os << "REPORT:" << "\n";
 
-    cout << "Genetic Algorithm was run " << counter << " times" << "\n";
+    os << "Genetic Algorithm was run " << iterations << " times" << "\n";
 
-    cout << "New fitness level: " << tours.front().get_fitness() << "\n";
-    cout << "Old fitness level: " << base_fitness << "\n";
+    os << "New highest fitness level: " << tours.front().get_fitness() << "\n";
+    os << "Initial highest fitness level: " << base_fitness << "\n";
 }

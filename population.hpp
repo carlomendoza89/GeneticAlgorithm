@@ -31,4 +31,5 @@ public:
     void repopulate();
 
     void run(std::ostream &os);
+    void report(std::ostream &os);
 };

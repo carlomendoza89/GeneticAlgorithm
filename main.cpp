@@ -177,7 +177,7 @@ int main() {
     population *p = new population(CITIES_IN_TOUR, POPULATION_SIZE, NUMBER_OF_ELITES, PARENT_POOL_SIZE, NUMBER_OF_PARENTS, MUTATION_RATE, ITERATIONS);
     p->init(cout);
     p->run(cout);
-
+    p->report(cout);
 
     return 0;
 }
