@@ -16,7 +16,7 @@ private:
     int number_of_parents;
     double mutation_rate;
     int iterations;
-    double base_fitness {0.0};
+    double base_distance {0.0};
     std::vector<city> cities_to_visit;
     std::vector<tour> tours;
     std::vector<tour> parents;

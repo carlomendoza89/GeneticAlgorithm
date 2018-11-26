@@ -46,20 +46,7 @@ void population::init(ostream &os)
 
     sort(tours.begin(), tours.end(), [](tour a, tour b) {return a.get_fitness() > b.get_fitness();});
 
-    base_fitness = tours.front().get_fitness();
-
-    int tour_counter {0};
-
-    for(auto tour : tours)
-    {
-        for(auto const &c : tour.get_cities())
-        {
-            os << "STARTING TOUR " << tour_counter << ": " << c << "\n";
-        }
-        os << "DISTANCE = " << tour.get_tour_distance() << "\n";
-        os << "FITNESS = " << tour.get_fitness() << "\n" << "\n";
-        tour_counter++;
-    }
+    base_distance = tours.front().get_tour_distance();
 }
 
 void population::select_parents()
@@ -151,7 +138,7 @@ void population::repopulate()
 
 void population::run(ostream &os)
 {
-    os << "RUNNING GENETIC ALGORITHM..." << "\n";
+    os << "RUNNING GENETIC ALGORITHM..." << "\n\n";
 
     for(int counter = 0; counter < iterations; ++counter)
     {
@@ -164,20 +151,10 @@ void population::run(ostream &os)
 
 void population::report(ostream &os)
 {
-    for(int i {0}; i < population_size; ++i)
-    {
-        for(auto const &c : tours[i].get_cities())
-        {
-            os << "FINAL TOUR " << i << ": " << c << "\n";
-        }
-        os << "DISTANCE = " << tours[i].get_tour_distance() << "\n";
-        os << "FITNESS = " << tours[i].get_fitness() << "\n" << "\n";
-    }
-
     os << "REPORT:" << "\n";
 
     os << "Genetic Algorithm was run " << iterations << " times" << "\n";
 
-    os << "New highest fitness level: " << tours.front().get_fitness() << "\n";
-    os << "Initial highest fitness level: " << base_fitness << "\n";
+    os << "Initial distance of fittest tour: " << base_distance << "\n";
+    os << "New distance of the fittest tour: " << tours.front().get_tour_distance() << "\n";
 }
